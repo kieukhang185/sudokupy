@@ -41,7 +41,7 @@ repos:
     hooks:
       - id: mypy
         name: mypy (backend)
-        files: ^backend/
+        files: ^backend/|^tests/
         args: ["--ignore-missing-imports", "--pretty"]
 
   - repo: https://github.com/pre-commit/mirrors-prettier
