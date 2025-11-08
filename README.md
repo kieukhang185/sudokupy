@@ -9,13 +9,13 @@ So if you try to place 5 at (4, 7), it ensures no other 5 already exists in that
 🧩 The grid structure
 
 A Sudoku board is 9×9, divided into nine 3×3 boxes:
-
+```bash
 Box 1 | Box 2 | Box 3
 ------+-------+------
 Box 4 | Box 5 | Box 6
 ------+-------+------
 Box 7 | Box 8 | Box 9
-
+```
 
 Each box covers:
 
@@ -41,11 +41,12 @@ def box_ok(board, r, c, v):
 The integer division (//) finds the top-left corner of that box.
 
 Example:
+```bash
 If (r, c) = (5, 7) → that’s row 5, col 7.
 
 r0 = (5 // 3) * 3 = 1 * 3 = 3
 c0 = (7 // 3) * 3 = 2 * 3 = 6
-
+```
 
 So this cell is inside the box that starts at (3,6) — that’s the middle-right box.
 
@@ -54,10 +55,10 @@ So this cell is inside the box that starts at (3,6) — that’s the middle-righ
 rr and cc iterate from r0 to r0+3, and c0 to c0+3.
 
 For our example, that means:
-
+```bash
 rr = 3, 4, 5
 cc = 6, 7, 8
-
+```
 
 — the 9 cells in that 3×3 region.
 
@@ -84,9 +85,9 @@ Suppose this part of the board:
 That’s one 3×3 box.
 
 You try to place a 5 at the top-left cell (0,0):
-
+```python
 r0 = 0, c0 = 0
-
+```
 The function checks all 9 cells inside that box.
 
 It finds 5 at (1,0) → so it returns False.
@@ -135,11 +136,11 @@ columns: 6, 7, 8
 
 
 These 9 cells are:
-
+```bash
 (3,6) (3,7) (3,8)
 (4,6) (4,7) (4,8)
 (5,6) (5,7) (5,8)
-
+```
 ### 3️⃣ Check each cell
 
 The code loops:
@@ -155,16 +156,19 @@ If any cell already equals 9, it’s invalid to place another 9 there.
 
 ### 4️⃣ Example outcome
 
-In our grid, (3,8) = 3, (4,8) = 1, (5,8) = 6, etc.
-There’s no 9 in this box → so the loop finishes and returns True.
+- In our grid, (3,8) = 3, (4,8) = 1, (5,8) = 6, etc.
+- There’s no 9 in this box → so the loop finishes and returns True.
 
 ✅ box_ok(board, 4, 7, 9) → True
+
 (you can place a 9 there if row and column are also OK)
 
 🧠 Quick visual summary
+```text
 Step	                Code	                        Meaning
 r0 = (r//3)*3	        find top-left row of box	    row group 0–2, 3–5, or 6–8
 c0 = (c//3)*3	        find top-left column of box	    col group 0–2, 3–5, or 6–8
 nested loops	        go through 9 cells in box	    check each value
-if board[rr][cc] == v	if duplicate found              → invalid	
+if board[rr][cc] == v	if duplicate found              → invalid
 return                  True	                        otherwise valid
+```
