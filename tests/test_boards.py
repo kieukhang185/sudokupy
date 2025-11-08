@@ -1,4 +1,4 @@
-from .utils import count_clues, is_board_str
+from tests.utils import count_clues, is_board_str
 
 
 def test_random_board_default_medium(client):

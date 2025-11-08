@@ -1,8 +1,8 @@
-from .utils import is_board_str
+from tests.utils import is_board_str
 
 
 def test_games_new(client):
-    r = client.post("/games/new", json={"difficulty": "MEDIUM"})
+    r = client.post("/games/new", json={"difficulty": "40"})
     assert r.status_code == 200
     data = r.json()
     assert is_board_str(data["puzzle"])
@@ -10,7 +10,7 @@ def test_games_new(client):
 
 
 def test_games_validate_and_solve(client):
-    r = client.post("/games/new", json={"difficulty": "EASY"})
+    r = client.post("/games/new", json={"difficulty": "40"})
     assert r.status_code == 200
     data = r.json()
     puzzle = data["puzzle"]

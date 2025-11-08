@@ -1,4 +1,4 @@
-import os
+import pathlib
 import sys
 
 import pytest
@@ -9,9 +9,7 @@ from sqlalchemy.orm import sessionmaker
 from backend.app.database import Base, get_db
 from backend.app.main import app
 
-ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-if ROOT not in sys.path:
-    sys.path.insert(0, ROOT)
+sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))  # project root
 
 
 TEST_DATABASE_URL = "sqlite+pysqlite:///:memory:"
