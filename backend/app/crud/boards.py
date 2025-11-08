@@ -1,9 +1,12 @@
 # api/app/crud/boards.py
 import secrets
+import uuid
 
-from app import models, schemas
-from sqlalchemy import select
+from fastapi import HTTPException
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
+
+from .. import models, schemas
 
 
 def create_board(db: Session, data: schemas.BoardCreate) -> models.Board:
@@ -19,7 +22,31 @@ def create_board(db: Session, data: schemas.BoardCreate) -> models.Board:
     return board
 
 
+def get_random_board(db: Session, difficulty: models.Difficulty):
+    """Return one random board for the given difficulty."""
+    row = (
+        db.query(models.Board)
+        .filter(models.Board.difficulty == difficulty)
+        .order_by(func.random())
+        .limit(1)
+        .one_or_none()
+    )
+    if not row:
+        raise HTTPException(404, f"No boards for {difficulty.name.lower()}")
+    return row
+
+
+def is_valid_uuid(uuid_string):
+    try:
+        uuid.UUID(str(uuid_string))  # Attempt to create a UUID object
+        return True
+    except ValueError:
+        return False
+
+
 def get_board_by_id(db: Session, board_id):
+    if not is_valid_uuid(board_id):
+        raise HTTPException(400, f"Invalid Board id: {board_id}")
     return db.get(models.Board, board_id)
 
 

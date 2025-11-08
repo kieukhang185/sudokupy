@@ -3,12 +3,13 @@ from datetime import datetime as py_datetime
 from datetime import timedelta
 from enum import Enum
 
-from app.database import Base
-from sqlalchemy import Boolean, CheckConstraint, Column, DateTime
+from sqlalchemy import Boolean, Column, DateTime
 from sqlalchemy import Enum as SAEnum
-from sqlalchemy import ForeignKey, Index, String, Text, UniqueConstraint, func
+from sqlalchemy import ForeignKey, Index, String, Text, func
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import relationship, validates
+
+from .database import Base
 
 
 class Difficulty(str, Enum):
@@ -184,15 +185,6 @@ class Board(Base):
         server_default=func.now(),
         onupdate=func.now(),
         nullable=False,
-    )
-
-    __table_args__ = (
-        CheckConstraint("char_length(initial_board) = 81", name="ck_initial_board_len"),
-        CheckConstraint(
-            "char_length(solution_board) = 81", name="ck_solution_board_len"
-        ),
-        UniqueConstraint("public_id", name="uq_boards_public_id"),
-        Index("ix_boards_difficulty", "difficulty"),
     )
 
     # ---------------- Validators ---------------- #

@@ -5,10 +5,11 @@ import uuid
 from datetime import datetime
 from typing import Optional
 
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
+
 # Import the Difficulty enum from your models module to avoid duplication.
 # Adjust the import path to match your project layout.
-from app.models import Difficulty
-from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
+from .models import Difficulty
 
 # =========================
 # Shared / Utilities

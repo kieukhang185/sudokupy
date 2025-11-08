@@ -2,11 +2,13 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-# Example: PostgreSQL; change to your DSN (.env recommended)
-DATABASE_URL = "postgresql+psycopg2://postgres:postgres@localhost:5432/sudoku"
+from .settings import settings
 
-engine = create_engine(DATABASE_URL, pool_pre_ping=True, future=True)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+DATABASE_URL = settings.db_url
+print(f"[DB] Using URL: {repr(DATABASE_URL)}")  # dev log
+connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+engine = create_engine(DATABASE_URL, pool_pre_ping=True, connect_args=connect_args)
+SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 Base = declarative_base()
 
 

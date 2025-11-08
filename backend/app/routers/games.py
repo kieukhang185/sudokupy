@@ -1,9 +1,10 @@
 # api/app/routers/games.py
 from typing import Dict, List, Set, Tuple
 
-from app import schemas
-from app.sudoku.generator import from_str, generate_puzzle, solve_backtrack, to_str
 from fastapi import APIRouter, HTTPException
+
+from .. import schemas
+from ..sudoku.generator import from_str, generate_puzzle, solve_backtrack, to_str
 
 router = APIRouter(prefix="/games", tags=["games"])
 

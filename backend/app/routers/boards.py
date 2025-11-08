@@ -1,19 +1,25 @@
 # api/app/routers/boards.py
 from typing import Annotated, TypeAlias
 
-from app import schemas
-from app.crud import boards as crud
-from app.database import get_db
-from app.models import Difficulty
-from app.sudoku.generator import generate_puzzle
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
+from .. import models, schemas
+from ..crud import boards as crud
+from ..database import get_db
+
 router = APIRouter(prefix="/boards", tags=["boards"])
 
-DifficultyParam = Annotated[Difficulty, Query(Difficulty.MEDIUM)]
+DifficultyParam = Annotated[models.Difficulty, Query()]
 DBSession: TypeAlias = Annotated[Session, Depends(get_db)]
-SEED = Query(default=None)
+
+
+@router.get("/random", response_model=schemas.BoardRead)
+def random_board(
+    db: DBSession,
+    difficulty: DifficultyParam = models.Difficulty.EASY,
+):
+    return crud.get_random_board(db, difficulty)
 
 
 @router.post("", response_model=schemas.BoardRead)
@@ -37,22 +43,3 @@ def get_board_by_public_id(public_id: str, db: DBSession):
     if not board:
         raise HTTPException(404, "Board not found")
     return board
-
-
-@router.get("/random", response_model=schemas.BoardRead)
-def random_board(
-    db: DBSession,
-    difficulty=DifficultyParam,
-    seed=SEED,
-):
-    # Generate consistent with Difficulty.clues
-    puzzle, solution = generate_puzzle(
-        seed=seed, clues=difficulty.clues
-    )  # uses property from your enum
-    req = schemas.BoardCreate(
-        public_id=crud.random_public_id(),
-        difficulty=difficulty,
-        initial_board=puzzle,
-        solution_board=solution,
-    )
-    return crud.create_board(db, req)
