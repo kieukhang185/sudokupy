@@ -13,20 +13,15 @@ from .database import Base
 
 
 class Difficulty(str, Enum):
-    """Enumerates the difficulty levels of a Sudoku puzzle."""
+    """String-valued difficulty names for Sudoku puzzles."""
 
-    EASY = "30"  # ~30 clues
-    MEDIUM = "40"  # ~40 clues
-    HARD = "50"  # ~50 clues
-    EXPERT = "60"  # ~60 clues
-
-    @property
-    def clues(self) -> int:
-        """Return the numeric count of filled cells."""
-        return int(self.value)
+    EASY = "easy"
+    MEDIUM = "medium"
+    HARD = "hard"
+    EXPERT = "expert"  # or EXPERT = "expert" if you prefer that label
 
     def __str__(self) -> str:
-        return self.name.lower()
+        return self.value
 
 
 # ---------------------------------------------------------------------

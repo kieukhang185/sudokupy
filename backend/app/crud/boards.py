@@ -32,7 +32,7 @@ def get_random_board(db: Session, difficulty: models.Difficulty):
         .one_or_none()
     )
     if not row:
-        raise HTTPException(404, f"No boards for {difficulty.name.lower()}")
+        raise HTTPException(404, f"No boards for {difficulty}")
     return row
 
 
@@ -42,6 +42,19 @@ def is_valid_uuid(uuid_string):
         return True
     except ValueError:
         return False
+
+
+def get_board_all(db: Session):
+    return db.query(models.Board).order_by(models.Board.created_at.desc()).all()
+
+
+def get_board_all_by_level(db: Session, difficulty: str):
+    return (
+        db.query(models.Board)
+        .filter(models.Board.difficulty == difficulty)
+        .order_by(models.Board.created_at.desc())
+        .all()
+    )
 
 
 def get_board_by_id(db: Session, board_id):

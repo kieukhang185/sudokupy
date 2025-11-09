@@ -90,7 +90,7 @@ def solve(req: schemas.SolveReq):
 
 @router.post("/new", response_model=schemas.NewGameResp)
 def new(req: schemas.NewGameReq):
-    puzzle, solution = generate_puzzle(req.seed, req.difficulty.clues)
+    puzzle, solution = generate_puzzle(req.seed, req.difficulty or "easy")
     return schemas.NewGameResp(
-        difficulty=req.difficulty, puzzle=puzzle, solution=solution
+        difficulty=(req.difficulty or "easy"), puzzle=puzzle, solution=solution
     )

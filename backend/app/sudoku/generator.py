@@ -2,7 +2,17 @@
 import random
 from typing import List, Tuple
 
+from ..models import Difficulty
+
 Board = List[List[int]]
+
+DIFFICULTY_TO_CLUES = {
+    "easy": 30,
+    "medium": 40,
+    "hard": 50,
+    "master": 60,  # tweak this number if you want a different target
+    "expert": 60,  # optional alias if you still use "expert" anywhere
+}
 
 
 def seeded_rng(seed: int | None) -> random.Random:
@@ -97,8 +107,14 @@ def carve_to_clues(full: Board, clues: int, seed: int | None) -> Board:
     return board
 
 
-def generate_puzzle(seed: int | None, clues: int) -> tuple[str, str]:
-    full = generate_full(seed)
+def clues_for(d: str | Difficulty) -> int:
+    name = (d.value if isinstance(d, Difficulty) else str(d)).lower()
+    return DIFFICULTY_TO_CLUES.get(name, DIFFICULTY_TO_CLUES["easy"])
+
+
+def generate_puzzle(seed: int | None, difficulty: str | Difficulty) -> tuple[str, str]:
+    clues = clues_for(difficulty)
+    full = generate_full(clues)
     solution = to_str(full)
     puzzle = to_str(carve_to_clues(full, clues, seed))
     return puzzle, solution

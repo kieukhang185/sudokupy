@@ -138,8 +138,43 @@ class ValidateResp(BaseModel):
 
 
 class NewGameReq(BaseModel):
-    difficulty: Difficulty = Difficulty.MEDIUM
+    # accept many forms: "easy", "EASY", "MEDIUM", 30 (clues), or Difficulty.MEDIUM
+    difficulty: Difficulty = Difficulty.EASY
     seed: Optional[int] = None
+
+    @field_validator("difficulty")
+    @classmethod
+    def coerce_difficulty(cls, v):
+        # Already a Difficulty:
+        if isinstance(v, Difficulty):
+            return v
+
+        # None → default
+        if v is None:
+            return Difficulty.EASY
+
+        # Integers or numeric strings as clues → map to enum by clues
+        try:
+            clues = int(v)
+            for d in Difficulty:
+                if d.clues == clues:
+                    return d
+        except Exception:
+            pass
+
+        # Strings → case-insensitive match by name
+        if isinstance(v, str):
+            s = v.strip().upper()
+            # permit both raw names ("EASY") and maybe accidentally passed values ("Difficulty.EASY")
+            s = s.split(".")[-1]  # "Difficulty.EASY" -> "EASY"
+            try:
+                return Difficulty[s]
+            except KeyError:
+                pass
+
+        raise ValueError(
+            "Invalid difficulty. Use EASY|MEDIUM|HARD|MASTER or a clue count."
+        )
 
 
 class NewGameResp(BaseModel):
