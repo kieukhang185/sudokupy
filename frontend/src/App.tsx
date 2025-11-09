@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import SudokuGrid from "./components/SudokuGrid";
 import {
   parse,
@@ -163,6 +163,7 @@ export default function App() {
     setCells(next);
     await autoCheck(next);
   };
+
   const undo = async () => {
     if (!cells || undoStack.length === 0) return;
     const cur = toCompact(cells);
@@ -173,6 +174,7 @@ export default function App() {
     setCells(p);
     await autoCheck(p);
   };
+
   const redo = async () => {
     if (!cells || redoStack.length === 0) return;
     const cur = toCompact(cells);
@@ -183,6 +185,14 @@ export default function App() {
     setCells(p);
     await autoCheck(p);
   };
+
+  const coords = useMemo(() => {
+    if (selected == null) return null;
+    const r = Math.floor(selected / 9);
+    const c = selected % 9;
+    const box = Math.floor(r / 3) * 3 + Math.floor(c / 3);
+    return { r: r + 1, c: c + 1, box: box + 1 };
+  }, [selected]);
 
   if (!cells)
     return <div className="min-h-screen grid place-items-center">Loading…</div>;
@@ -230,6 +240,12 @@ export default function App() {
           ⏱ {formatTime(elapsed)}
         </span>
       </div>
+
+      {/* New: show row/col/box for selected */}
+      {/* <div className="text-sm text-gray-600 h-5">
+        {coords ? `r${coords.r} c${coords.c} box ${coords.box}` : ''}
+      </div> */}
+
       <SudokuGrid
         cells={cells}
         selected={selected}
@@ -241,7 +257,9 @@ export default function App() {
       />
       <div className="flex items-center gap-2">
         <button
-          className="px-3 py-2 rounded-xl shadow bg-white hover:bg-gray-50"
+          className={`px-3 py-2 rounded-xl shadow bg-white hover:bg-gray-50 ${
+            pencil ? "ring-2 ring-blue-500" : ""
+          }`}
           onClick={() => setPencil((p) => !p)}
         >
           {pencil ? "Pencil: ON" : "Pencil: OFF"}
@@ -261,6 +279,7 @@ export default function App() {
           Redo
         </button>
       </div>
+
       <KeyboardHandler onDigit={(n) => onInput(n)} onClear={() => onClear()} />
     </div>
   );
