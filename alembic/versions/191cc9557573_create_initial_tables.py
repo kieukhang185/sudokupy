@@ -23,7 +23,7 @@ def upgrade() -> None:
     op.create_table('boards',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('public_id', sa.String(length=150), nullable=False),
-    sa.Column('difficulty', sa.Enum('EASY', 'MEDIUM', 'HARD', 'EXPERT', name='difficulty'), nullable=False),
+    sa.Column('difficulty', sa.Enum('EASY', 'MEDIUM', 'HARD', 'EXPERT', 'MASTER', 'EXTREME', name='difficulty'), nullable=False),
     sa.Column('initial_board', sa.String(length=81), nullable=False),
     sa.Column('solution_board', sa.String(length=81), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),

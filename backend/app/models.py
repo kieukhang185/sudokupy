@@ -18,7 +18,9 @@ class Difficulty(str, Enum):
     EASY = "easy"
     MEDIUM = "medium"
     HARD = "hard"
-    EXPERT = "expert"  # or EXPERT = "expert" if you prefer that label
+    EXPERT = "expert"
+    MASTER = "master"
+    EXTREME = "extreme"
 
     def __str__(self) -> str:
         return self.value

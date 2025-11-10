@@ -7,11 +7,12 @@ from ..models import Difficulty
 Board = List[List[int]]
 
 DIFFICULTY_TO_CLUES = {
-    "easy": 30,
-    "medium": 40,
-    "hard": 50,
-    "master": 60,  # tweak this number if you want a different target
-    "expert": 60,  # optional alias if you still use "expert" anywhere
+    "easy": 36,
+    "medium": 32,
+    "hard": 28,
+    "expert": 22,
+    "master": 17,
+    "extreme": 12,
 }
 
 
@@ -109,7 +110,10 @@ def carve_to_clues(full: Board, clues: int, seed: int | None) -> Board:
 
 def clues_for(d: str | Difficulty) -> int:
     name = (d.value if isinstance(d, Difficulty) else str(d)).lower()
-    return DIFFICULTY_TO_CLUES.get(name, DIFFICULTY_TO_CLUES["easy"])
+    value = DIFFICULTY_TO_CLUES.get(name)
+    if value is None:
+        raise ValueError(f"Unknown difficulty name: {name}")
+    return value
 
 
 def generate_puzzle(seed: int | None, difficulty: str | Difficulty) -> tuple[str, str]:

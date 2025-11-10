@@ -8,6 +8,7 @@ if (!BASE) {
 export const API_BASE = BASE;
 
 export async function newGame(type: string) {
+  console.log(type);
   const r = await fetch(`${API_BASE}/games/new`, {
     method: "POST",
     headers: {

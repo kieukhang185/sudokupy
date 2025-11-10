@@ -10,6 +10,11 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
 
   postgres:
     container_name: sudokupy-postgres
@@ -33,7 +38,8 @@ services:
     env_file:
       - .env.development
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     ports:
       - "5173:5173"
     restart: unless-stopped

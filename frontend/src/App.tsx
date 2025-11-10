@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import SudokuGrid from "./components/SudokuGrid";
 import {
   parse,
@@ -10,10 +11,11 @@ import {
 } from "./utils/board";
 import { newGame, getBoardById, validateBoard, solveBoard } from "./utils/api";
 
-type BoardType = "easy" | "medium" | "hard" | "master";
+type BoardType = "easy" | "medium" | "hard" | "expert" | "master" | "extreme";
 const STORAGE_KEY = "sudoku.single.player.v1";
 
 export default function App() {
+  const { level } = useParams<{ level: string }>(); // 'easy' | 'medium' | 'hard' | 'master'
   const [cells, setCells] = useState<Cell[] | null>(null);
   const [selected, setSelected] = useState<number | null>(null);
   const [pencil, setPencil] = useState(false);
@@ -199,6 +201,9 @@ export default function App() {
   return (
     <div className="min-h-screen p-6 flex flex-col items-center gap-4">
       <h1 className="text-3xl font-bold">Sudoku — Single Player</h1>
+      <Link to="/" className="text-blue-600 hover:underline">
+        ← Home
+      </Link>
       <div className="flex flex-wrap items-center gap-2">
         <label className="flex items-center gap-2">
           <span>Type</span>
@@ -210,7 +215,9 @@ export default function App() {
             <option value="easy">EASY</option>
             <option value="medium">MEDIUM</option>
             <option value="hard">HARD</option>
+            <option value="expert">EXPERT</option>
             <option value="master">MASTER</option>
+            <option value="extreme">EXTREME</option>
           </select>
         </label>
         <button
@@ -243,8 +250,8 @@ export default function App() {
 
       {/* New: show row/col/box for selected */}
       {/* <div className="text-sm text-gray-600 h-5">
-        {coords ? `r${coords.r} c${coords.c} box ${coords.box}` : ''}
-      </div> */}
+          {coords ? `r${coords.r} c${coords.c} box ${coords.box}` : ''}
+        </div> */}
 
       <SudokuGrid
         cells={cells}

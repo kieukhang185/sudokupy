@@ -1,0 +1,3 @@
+# postgres local for alembic
+docker run --name local-pg -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=sudokupy -p 5432:5432 -d postgres:16
+export DATABASE_URL='postgresql+psycopg2://postgres:postgres@localhost:5432/sudokupy'
