@@ -1,8 +1,14 @@
-const BASE = import.meta.env.VITE_API_BASE || "http://localhost:8000";
+let BASE = import.meta.env.VITE_API_BASE;
+
+if (!BASE) {
+  BASE =
+    import.meta.env.MODE === "development" ? "http://localhost:8000" : "/api";
+}
+
+export const API_BASE = BASE;
 
 export async function newGame(type: string) {
-  console.log(type);
-  const r = await fetch(`${BASE}/games/new`, {
+  const r = await fetch(`${API_BASE}/games/new`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -16,13 +22,13 @@ export async function newGame(type: string) {
 }
 
 export async function getBoardById(id: string) {
-  const r = await fetch(`${BASE}/boards/${id}`);
+  const r = await fetch(`${API_BASE}/boards/${id}`);
   if (!r.ok) throw new Error("getBoardById");
   return r.json();
 }
 
 export async function validateBoard(state: string) {
-  const r = await fetch(`${BASE}/games/validate`, {
+  const r = await fetch(`${API_BASE}/games/validate`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -36,7 +42,7 @@ export async function validateBoard(state: string) {
 }
 
 export async function solveBoard(state: string) {
-  const r = await fetch(`${BASE}/games/solve`, {
+  const r = await fetch(`${API_BASE}/games/solve`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

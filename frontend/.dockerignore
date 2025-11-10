@@ -1,0 +1,51 @@
+# Ignore common version control directories and files
+.git
+.gitignore
+.svn
+.hg
+
+# Ignore common build and dependency management directories
+node_modules/
+vendor/
+target/
+dist/
+build/
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# Ignore environment-specific files
+.env
+.env.*
+
+# Ignore editor and IDE specific files
+.vscode/
+.idea/
+*.swp
+*.bak
+*~
+
+# Ignore Docker-specific files (except the Dockerfile itself)
+Dockerfile.bak
+docker-compose.yml
+
+# Ignore temporary files and caches
+tmp/
+temp/
+*.tmp
+*.cache
+
+# Specific to Python projects
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+
+# Specific to Java projects
+.gradle/
+*.jar
+*.war
+
+# Specific to Node.js projects
+package-lock.json
+yarn.lock
